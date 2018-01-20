@@ -56,6 +56,18 @@ namespace WpfMath
             Initialize();
         }
 
+        public static IList<string> GetAllCommands()
+        {
+            return commands.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
+        public static IList<string> GetAllFormulas()
+        {
+            return predefinedFormulas.Keys.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
+        public static IList<string> GetAllSymbols()
+        {
+            return SymbolAtom.GetAllSymbols();
+        }
         internal static string[][] DelimiterNames
         {
             get { return delimiterNames; }
