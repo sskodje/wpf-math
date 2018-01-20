@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -57,11 +57,11 @@ namespace WpfMath
         {
             var visual = new DrawingVisual();
             using (var drawingContext = visual.RenderOpen())
-                this.Render(drawingContext, 0, 0);
+                this.Render(drawingContext, x, y);
 
             var width = (int)Math.Ceiling(this.RenderSize.Width);
             var height = (int)Math.Ceiling(this.RenderSize.Height);
-            var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Default);
+            var bitmap = new RenderTargetBitmap((int)Math.Round(width+ x*2), (int)Math.Round(height+y*2), 96, 96, PixelFormats.Default);
             bitmap.Render(visual);
 
             return bitmap;

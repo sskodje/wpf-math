@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Text;
@@ -63,7 +63,7 @@ namespace WpfMath.Example
                             writer.WriteLine(svgText);
                         break;
                     case 2:
-                        var bitmap = renderer.RenderToBitmap(0, 0);
+                        var bitmap = renderer.RenderToBitmap(10, 10);
                         var encoder = new PngBitmapEncoder
                         {
                             Frames = { BitmapFrame.Create(bitmap) }
