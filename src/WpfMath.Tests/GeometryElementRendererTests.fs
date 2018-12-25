@@ -8,6 +8,7 @@ open Foq
 open Xunit
 
 open WpfMath
+open WpfMath.Boxes
 open WpfMath.Rendering
 open WpfMath.Rendering.Transformations
 
@@ -27,7 +28,7 @@ type GeometryElementRendererTests() =
     member __.``GeometryElementRenderer.RenderGlyphRun adds a PathGeometry group``() : unit =
         let font = DefaultTexFont 20.0
         let environment = TexEnvironment(TexStyle.Display, font, font)
-        let char = environment.MathFont.GetDefaultCharInfo('x', TexStyle.Display)
+        let char = environment.MathFont.GetDefaultCharInfo('x', TexStyle.Display).Value
         let charBox = CharBox(environment, char)
         let glyphRun = charBox.GetGlyphRun(1.0, 0.0, 0.0)
         let factory = Func<double, GlyphRun>(fun s -> glyphRun)

@@ -1,35 +1,18 @@
-module WpfMath.Tests.ParserTests
+﻿module WpfMath.Tests.ParserTests
 
-open System
-
-open DeepEqual.Syntax
 open Xunit
 
 open WpfMath
+open WpfMath.Atoms
 open WpfMath.Exceptions
 open WpfMath.Tests.Utils
 
-let assertParseResult formula expected =
-    let parser = TexFormulaParser()
-    let result = parser.Parse(formula)
-    result.WithDeepEqual(expected)
-        .ExposeInternalsOf<TexFormula>()
-        .ExposeInternalsOf<FencedAtom>()
-        .Assert()
-
-let assertParseThrows<'ex when 'ex :> exn> formula =
-    let parser = TexFormulaParser()
-    Assert.Throws<'ex>(Func<obj>(fun () -> upcast parser.Parse(formula)))
-
-let textStyle = "text"
-let rmStyle = "mathrm"
-let itStyle = "mathit"
-let calStyle = "mathcal"
-
+let private ``123`` : Atom seq = [| char '1'; char '2'; char '3' |] |> Seq.map (fun x -> upcast x)
 let ``2+2`` = row [char '2'; symbol "plus"; char '2']
-let ``\mathrm{2+2}`` = row [styledChar('2', rmStyle); symbol "plus"; styledChar('2', rmStyle)]
-let ``\lim`` = row [styledChar('l', rmStyle); styledChar('i', rmStyle); styledChar('m', rmStyle)]
-let ``\sin`` = row [styledChar('s', rmStyle); styledChar('i', rmStyle); styledChar('n', rmStyle)]
+let ``\mathrm{2+2}`` = row [styledChar '2' rmStyle; symbol "plus"; styledChar '2' rmStyle]
+let ``\lim`` = row [styledChar 'l' rmStyle; styledChar 'i' rmStyle; styledChar 'm' rmStyle]
+let ``\sin`` = row [styledChar 's' rmStyle; styledChar 'i' rmStyle; styledChar 'n' rmStyle]
+let redBrush = brush "#ed1b23"
 
 [<Fact>]
 let ``2+2 should be parsed properly`` () =
@@ -92,14 +75,12 @@ let ``\text command should be supported`` () =
 
 [<Fact>]
 let ``Spaces in \text shouldn't be ignored`` () =
-    let textChar c = styledChar (c, textStyle)
     assertParseResult
     <| @"\text{a b c}"
     <| (formula <| row [textChar 'a'; space; textChar 'b'; space; textChar 'c'])
 
 [<Fact>]
 let ``\text should support Cyrillic`` () =
-    let textChar c = styledChar (c, textStyle)
     assertParseResult
     <| @"\text{абв}"
     <| (formula <| styledString textStyle "абв")
@@ -108,7 +89,7 @@ let ``\text should support Cyrillic`` () =
 let ``\mathrm should be parsed properly`` () =
     assertParseResult
     <| @"\mathrm{sin}"
-    <| (formula <| row [styledChar('s', rmStyle); styledChar('i', rmStyle); styledChar('n', rmStyle)])
+    <| (formula <| row [styledChar 's' rmStyle; styledChar 'i' rmStyle; styledChar 'n' rmStyle])
 
 [<Fact>]
 let ``\mathrm should be parsed properly for complex eqs`` () =
@@ -122,14 +103,14 @@ let ``\mathrm should be parsed properly for complex eqs`` () =
 let ``\mathit should be parsed properly`` () =
     assertParseResult
     <| @"\mathit{sin}"
-    <| (formula <| row [styledChar('s', itStyle); styledChar('i', itStyle); styledChar('n', itStyle)])
+    <| (formula <| row [styledChar 's' itStyle; styledChar 'i' itStyle; styledChar 'n' itStyle])
 
 
 [<Fact>]
 let ``\mathcal should be parsed properly`` () =
     assertParseResult
     <| @"\mathcal{sin}"
-    <| (formula <| row [styledChar('s', calStyle); styledChar('i', calStyle); styledChar('n', calStyle)])
+    <| (formula <| row [styledChar 's' calStyle; styledChar 'i' calStyle; styledChar 'n' calStyle])
 
 [<Fact>]
 let ``\mathrm{} should throw exn`` () =
@@ -142,7 +123,7 @@ let ``\lim should be parsed properly`` () =
     assertParseResult
     <| @"\lim_{n} x"
     <| (formula <| row [
-                    opWithScripts ``\lim`` (char 'n') null (System.Nullable true);
+                    opWithScripts ``\lim`` (char 'n') null (Some true)
                     char 'x'
                         ])
 
@@ -151,7 +132,7 @@ let ``{\lim} x should be parsed properly`` () =
     assertParseResult
     <| @"{\lim} x"
     <| (formula <| row [
-                    group (op ``\lim`` (System.Nullable true));
+                    group (op ``\lim`` (Some true))
                     char 'x'
                         ])
 
@@ -160,7 +141,7 @@ let ``\sin should be parsed properly`` () =
     assertParseResult
     <| @"\sin^{n} x"
     <| (formula <| row [
-                    opWithScripts ``\sin`` null (char 'n') (System.Nullable false);
+                    opWithScripts ``\sin`` null (char 'n') (Some false)
                     char 'x'
                         ])
 
@@ -169,7 +150,7 @@ let ``\int f should be parser properly`` () =
     assertParseResult
     <| @"\int f"
     <| (formula <| row [
-                    op (symbolOp "int") (System.Nullable ())
+                    op (symbolOp "int") (None)
                     char 'f'
                         ])
 
@@ -185,10 +166,108 @@ let ``Delimiter with scripts should be parsed properly`` () =
     <| @"\left(2+2\right)_a^b"
     <| (formula <| scripts (fenced (openBrace "lbrack") ``2+2`` (closeBrace "rbrack")) (char 'a') (char 'b'))
 
-[<Fact>]
-let ``\sqrt{} should throw a TexParseException``() =
-    assertParseThrows<TexParseException> @"\sqrt{}"
+let ``\text doesn't create any SymbolAtoms``() =
+    assertParseResult
+    <| @"\text{2+2}"
+    <| (formula <| row [char '2'; char '+'; char '2'])
 
 [<Fact>]
-let ``"\sum_" should throw a TexParseException``() =
+let ``\sqrt should throw a TexParseException``() =
+    assertParseThrows<TexParseException> @"\sqrt"
+
+[<Fact>]
+let ``"\sum_ " should throw a TexParseException``() =
     assertParseThrows<TexParseException> @"\sum_ "
+
+[<Theory>]
+[<InlineData(@"\color{red}1123");
+  InlineData(@"\color{red}{1}123");
+  InlineData(@"\color{red} 1123");
+  InlineData(@"\color{red} {1}123")>]
+let ``\color should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast foreColor (char '1') redBrush; yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\colorbox{red}1123");
+  InlineData(@"\colorbox{red}{1}123");
+  InlineData(@"\colorbox{red} 1123");
+  InlineData(@"\colorbox{red} {1}123")>]
+let ``\colorbox should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast backColor (char '1') redBrush; yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\frac2x123");
+  InlineData(@"\frac2{x}123");
+  InlineData(@"\frac{2}x123");
+  InlineData(@"\frac{2}{x}123");
+  InlineData(@"\frac 2 x123");
+  InlineData(@"\frac2 {x}123");
+  InlineData(@"\frac 2{x}123")>]
+let ``\frac should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast fraction (char '2') (char 'x'); yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\overline1123");
+  InlineData(@"\overline{1}123");
+  InlineData(@"\overline 1123");
+  InlineData(@"\overline {1}123")>]
+let ``\overline should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast overline(char '1'); yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\sqrt1123");
+  InlineData(@"\sqrt{1}123");
+  InlineData(@"\sqrt 1123");
+  InlineData(@"\sqrt {1}123")>]
+let ``\sqrt should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast radical(char '1'); yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\sqrt [2]1123");
+  InlineData(@"\sqrt [ 2]{1}123");
+  InlineData(@"\sqrt[2 ] 1123");
+  InlineData(@"\sqrt[ 2 ] {1}123")>]
+let ``\sqrt should parse optional argument properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast radicalWithDegree (char '2') (char '1'); yield! ``123`` }))
+
+[<Theory>]
+[<InlineData(@"\underline1123");
+  InlineData(@"\underline{1}123");
+  InlineData(@"\underline 1123");
+  InlineData(@"\underline {1}123")>]
+let ``\underline should parse arguments properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast underline(char '1'); yield! ``123`` }))
+
+[<Theory>]
+[<InlineData("x^y_z");
+  InlineData("x^y_{z}");
+  InlineData("x^{y}_z");
+  InlineData("x^{y}_{z}");
+  InlineData("x^y_ z");
+  InlineData("x ^ {y} _ {z}")>]
+let ``Scripts should be parsed properly``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula <| scripts (char 'x') (char 'z') (char 'y'))
+
+[<Theory>]
+[<InlineData(@"\text 1123");
+  InlineData(@"\text {1}123")>]
+let ``\text command should support extended argument parsing``(text : string) : unit =
+    assertParseResult
+    <| text
+    <| (formula (row <| seq { yield upcast styledChar '1' textStyle; yield! ``123`` }))

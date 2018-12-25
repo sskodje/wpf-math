@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using WpfMath.Boxes;
 using WpfMath.Rendering.Transformations;
 
 namespace WpfMath.Rendering
@@ -87,7 +88,7 @@ namespace WpfMath.Rendering
         }
 
         /// <summary>
-        /// Genetates the guidelines for WPF render to snap the box boundaries onto the device pixel grid.
+        /// Generates the guidelines for WPF render to snap the box boundaries onto the device pixel grid.
         /// </summary>
         private GuidelineSet GenerateGuidelines(Box box, double x, double y) => new GuidelineSet
         {
