@@ -65,7 +65,7 @@ namespace WpfMath.Example
                         break;
 
                     case 2:
-                        var bitmap = renderer.RenderToBitmap(0, 0, 300);
+                        var bitmap = renderer.RenderToBitmap(10, 10);
                         var encoder = new PngBitmapEncoder
                         {
                             Frames = { BitmapFrame.Create(bitmap) }

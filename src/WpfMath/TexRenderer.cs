@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -73,7 +73,7 @@ namespace WpfMath
             }
         }
 
-        public BitmapSource RenderToBitmap(double x, double y, double dpi)
+        public BitmapSource RenderToBitmap(double x, double y, double dpi=96)
         {
             var visual = new DrawingVisual();
             this.RenderWithPositiveCoordinates(visual, x, y);
@@ -81,7 +81,7 @@ namespace WpfMath
             var bounds = visual.ContentBounds;
             var width = (int)Math.Ceiling(bounds.Right * dpi / DefaultDpi);
             var height = (int)Math.Ceiling(bounds.Bottom * dpi / DefaultDpi);
-            var bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
+            var bitmap = new RenderTargetBitmap((int)Math.Round(width+ x), (int)Math.Round(height+y), dpi, dpi, PixelFormats.Default);
             bitmap.Render(visual);
 
             return bitmap;

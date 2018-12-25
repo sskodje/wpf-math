@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using WpfMath.Utils;
 
 namespace WpfMath.Atoms
@@ -34,7 +35,10 @@ namespace WpfMath.Atoms
             validSymbolTypes.Set((int)TexAtomType.Punctuation, true);
             validSymbolTypes.Set((int)TexAtomType.Accent, true);
         }
-
+        public static IList<string> GetAllSymbols()
+        {
+            return symbols.Keys.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
         public static SymbolAtom GetAtom(string name, SourceSpan source)
         {
             try

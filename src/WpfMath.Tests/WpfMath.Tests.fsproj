@@ -4,7 +4,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../WpfMath/WpfMath.csproj" />
     <PackageReference Include="DeepEqual" Version="1.6.0.0" />
     <PackageReference Include="Foq" Version="1.7.3" />
     <PackageReference Include="FSharp.Core" Version="4.2.3" />
@@ -40,5 +39,8 @@
     <Compile Include="TransformationTests.fs" />
     <Compile Include="VerticalBoxTests.fs" />
     <Compile Include="WpfRendererTests.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WpfMath\WpfMath.csproj" />
   </ItemGroup>
 </Project>

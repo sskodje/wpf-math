@@ -110,6 +110,7 @@ namespace WpfMath.Controls
         public FormulaControl()
         {
             InitializeComponent();
+            SetError(new TexParseException("Formula is empty"));
         }
 
         private void Render()
@@ -160,6 +161,10 @@ namespace WpfMath.Controls
             var formula = (string)baseValue;
             try
             {
+                if (String.IsNullOrEmpty(formula))
+                {
+                    throw new TexParseException("Formula is empty");
+                }
                 control.HasError = false;
                 control.Errors.Clear();
                 control.texFormula = formulaParser.Parse(formula);

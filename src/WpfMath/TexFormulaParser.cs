@@ -62,6 +62,18 @@ namespace WpfMath
             get { return delimiterNames; }
         }
 
+        public static IList<string> GetAllCommands()
+        {
+            return commands.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
+        public static IList<string> GetAllFormulas()
+        {
+            return predefinedFormulas.Keys.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
+        public static IList<string> GetAllSymbols()
+        {
+            return SymbolAtom.GetAllSymbols();
+        }
         private static void Initialize()
         {
             //
@@ -76,14 +88,14 @@ namespace WpfMath
 
             commands = new HashSet<string>
             {
-                "color",
-                "colorbox",
                 "frac",
                 "left",
                 "overline",
                 "right",
                 "sqrt",
-                "underline"
+                "underline",
+                "color",
+                "colorbox",
             };
 
             var formulaSettingsParser = new TexPredefinedFormulaSettingsParser();
