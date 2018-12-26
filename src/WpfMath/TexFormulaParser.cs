@@ -228,7 +228,7 @@ namespace WpfMath
                         TexAtomType.Ordinary,
                         TexAtomType.Ordinary);
                     var scriptsAtom = this.AttachScripts(formula, value, ref position, groupAtom);
-                    formula.Add(scriptsAtom, value.Segment(initialPosition, position-initialPosition));
+                    formula.Add(scriptsAtom, value.Segment(initialPosition, position - initialPosition));
                 }
                 else if (ch == rightGroupChar)
                 {
@@ -242,7 +242,10 @@ namespace WpfMath
                             + superScriptChar + "\", \"" + subScriptChar + "\" and \""
                             + primeChar + "\" can't be the first character!");
                     else
-                        throw new TexParseException("Double scripts found! Try using more braces.");
+                    {
+                        var scriptsAtom = this.AttachScripts(formula, value, ref position, new RowAtom(value));
+                        formula.Add(scriptsAtom, value.Segment(initialPosition, position));
+                    }
                 }
                 else
                 {

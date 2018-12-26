@@ -9,6 +9,9 @@
     <Copyright>Copyright © Alex Regueiro 2010; Copyright © WPF-Math Contributors 2018</Copyright>
     <AssemblyVersion>0.6.0</AssemblyVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data/*" />
     <Resource Include="Fonts\cmex10.ttf" />
