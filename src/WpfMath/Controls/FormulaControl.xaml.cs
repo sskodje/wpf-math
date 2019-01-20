@@ -161,12 +161,12 @@ namespace WpfMath.Controls
             var formula = (string)baseValue;
             try
             {
+                control.HasError = false;
+                control.Errors.Clear();
                 if (String.IsNullOrEmpty(formula))
                 {
                     throw new TexParseException("Formula is empty");
                 }
-                control.HasError = false;
-                control.Errors.Clear();
                 control.texFormula = formulaParser.Parse(formula);
                 return baseValue;
             }
