@@ -74,6 +74,10 @@ namespace WpfMath
         {
             return SymbolAtom.GetAllSymbols();
         }
+        public static IList<string> GetAllTextStyles()
+        {
+            return textStyles.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+        }
         private static void Initialize()
         {
             //
