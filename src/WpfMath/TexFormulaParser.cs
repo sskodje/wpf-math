@@ -397,6 +397,8 @@ namespace WpfMath
                         }
 
                         var sqrtFormula = this.Parse(ReadElement(value, ref position), formula.TextStyle);
+                        if (sqrtFormula.RootAtom == null)
+                            throw new TexParseException($"The radicand of the square root at column {position - 1} can't be empty!");
 
                         source = value.Segment(start, position - start);
                         return new Radical(source, sqrtFormula.RootAtom, degreeFormula?.RootAtom);
