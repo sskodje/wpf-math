@@ -127,15 +127,17 @@ namespace WpfMath.Controls
             var renderer = texFormula.GetRenderer(TexStyle.Display, Scale, SystemTextFontName);
 
             var selectionBrush = SelectionBrush;
-            if (selectionBrush != null)
+
+            var allBoxes = new List<Box>(renderer.Box.Children);
+            var selectionStart = SelectionStart;
+            var selectionEnd = selectionStart + SelectionLength;
+            for (int idx = 0; idx < allBoxes.Count; idx++)
             {
-                var allBoxes = new List<Box>(renderer.Box.Children);
-                var selectionStart = SelectionStart;
-                var selectionEnd = selectionStart + SelectionLength;
-                for (int idx = 0; idx < allBoxes.Count; idx++)
+                var box = allBoxes[idx];
+                box.Foreground = this.Foreground;
+                allBoxes.AddRange(box.Children);
+                if (selectionBrush != null)
                 {
-                    var box = allBoxes[idx];
-                    allBoxes.AddRange(box.Children);
                     var source = box.Source;
                     if (source != null)
                     {
