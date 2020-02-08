@@ -1,0 +1,19 @@
+{
+  "Children": [],
+  "Source": {
+    "Start": 1,
+    "End": 13,
+    "Length": 12,
+    "Source": "\\color{red}{}",
+    "SourceName": "User input"
+  },
+  "Foreground": "#FFED1B23",
+  "Background": null,
+  "TotalHeight": 0.0,
+  "TotalWidth": 0.0,
+  "Italic": 0.0,
+  "Width": 0.0,
+  "Height": 0.0,
+  "Depth": 0.0,
+  "Shift": 0.0
+}

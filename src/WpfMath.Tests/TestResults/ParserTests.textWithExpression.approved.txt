@@ -1,0 +1,65 @@
+{
+  "TextStyle": null,
+  "RootAtom": {
+    "PreviousAtom": null,
+    "Elements": [
+      {
+        "Character": "2",
+        "TextStyle": "text",
+        "IsDefaultTextStyle": false,
+        "IsTextSymbol": false,
+        "Type": "Ordinary",
+        "Source": {
+          "Start": 6,
+          "End": 7,
+          "Length": 1,
+          "Source": "\\text{2+2}",
+          "SourceName": "User input"
+        }
+      },
+      {
+        "Character": "+",
+        "TextStyle": "text",
+        "IsDefaultTextStyle": false,
+        "IsTextSymbol": false,
+        "Type": "Ordinary",
+        "Source": {
+          "Start": 7,
+          "End": 8,
+          "Length": 1,
+          "Source": "\\text{2+2}",
+          "SourceName": "User input"
+        }
+      },
+      {
+        "Character": "2",
+        "TextStyle": "text",
+        "IsDefaultTextStyle": false,
+        "IsTextSymbol": false,
+        "Type": "Ordinary",
+        "Source": {
+          "Start": 8,
+          "End": 9,
+          "Length": 1,
+          "Source": "\\text{2+2}",
+          "SourceName": "User input"
+        }
+      }
+    ],
+    "Type": "Ordinary",
+    "Source": {
+      "Start": 6,
+      "End": 9,
+      "Length": 3,
+      "Source": "\\text{2+2}",
+      "SourceName": "User input"
+    }
+  },
+  "Source": {
+    "Start": 0,
+    "End": 10,
+    "Length": 10,
+    "Source": "\\text{2+2}",
+    "SourceName": "User input"
+  }
+}

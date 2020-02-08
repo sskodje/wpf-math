@@ -46,8 +46,11 @@ namespace WpfMath
             }
         }
 
-        public void RenderFormulaTo(IElementRenderer renderer, double x, double y) =>
+        public void RenderFormulaTo(IElementRenderer renderer, double x, double y)
+        {
             renderer.RenderElement(Box, x / Scale, y / Scale + Box.Height);
+            renderer.FinishRendering();
+        }
 
         public Geometry RenderToGeometry(double x, double y)
         {
@@ -73,7 +76,7 @@ namespace WpfMath
             }
         }
 
-        public BitmapSource RenderToBitmap(double x, double y, double dpi=96)
+        public BitmapSource RenderToBitmap(double x, double y, double dpi)
         {
             var visual = new DrawingVisual();
             this.RenderWithPositiveCoordinates(visual, x, y);
@@ -81,7 +84,7 @@ namespace WpfMath
             var bounds = visual.ContentBounds;
             var width = (int)Math.Ceiling(bounds.Right * dpi / DefaultDpi);
             var height = (int)Math.Ceiling(bounds.Bottom * dpi / DefaultDpi);
-            var bitmap = new RenderTargetBitmap((int)Math.Round(width+ x), (int)Math.Round(height+y), dpi, dpi, PixelFormats.Default);
+            var bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
             bitmap.Render(visual);
 
             return bitmap;

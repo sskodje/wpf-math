@@ -1,20 +1,40 @@
-using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using WpfMath.Converters;
 
 namespace WpfMath.Example
 {
     public partial class MainWindow : Window
     {
-        private TexFormulaParser formulaParser;
+        private readonly TexFormulaParser _formulaParser = new TexFormulaParser();
+
+        private static ComboBoxItem DemoFormula(string name, string text) =>
+            new ComboBoxItem { Content = name, DataContext = text };
+
+        private readonly IList<ComboBoxItem> _testFormulas = new[]
+        {
+            DemoFormula("Integral 1", @"\int_0^{\infty}{x^{2n} e^{-a x^2} dx} = \frac{2n-1}{2a} \int_0^{\infty}{x^{2(n-1)} e^{-a x^2} dx} = \frac{(2n-1)!!}{2^{n+1}} \sqrt{\frac{\pi}{a^{2n+1}}}"),
+            DemoFormula("Integral 2", @"\int_a^b{f(x) dx} = (b - a) \sum_{n = 1}^{\infty}  {\sum_{m = 1}^{2^n  - 1} { ( { - 1} )^{m + 1} } } 2^{ - n} f(a + m ( {b - a}  )2^{-n} )"),
+            DemoFormula("Integral 3", @"L = \int_a^\infty \sqrt[4]{ \left\vert \sum_{i,j=1}^ng_{ij}\left\(\gamma(t)\right\) \left\[\frac{d}{dt}x^i\circ\gamma(t) \right\] \left\{\frac{d}{dt}x^j\circ\gamma(t) \right\} \right\|}dt"),
+            DemoFormula("Number matrix", @"\matrix{4&78&3 \\ 5 & 9  & 82 }"),
+            DemoFormula("Nested matrix", @"\matrix{4&78&3\\ 57 & {\matrix{78 \\ 12}}  & 20782 }"),
+            DemoFormula("Cases", @"f(x) = \cases{1/3 & if \thinspace 0\le x\le 1;\cr 2/3 & if \thinspace 3\le x \le 4; \cr 0 & elsewhere.\cr}"),
+            DemoFormula("Matrix and new lines", @"v \times w = \left( \matrix{v_2 w_3 - v_3 w_2 \\ v_3 w_1 - v_1 w_3 \\ v_1 w_2 - v_2 w_1} \right) \\ \matrix{where & v= \left(\matrix{ v_1 \\ v_2 \\ v_3 }\right), \\ & w= \left( \matrix{w_1 \\ w_2  \\ w_3} \right)}"),
+            DemoFormula("Big matrix", @"\Gamma_{\mu \rho} ^{\sigma}= \pmatrix{\pmatrix{0 & 0 & 0 \\ 0 & -r & 0 \\ 0 & 0 & -r sin^2(\theta)} \\ \pmatrix{0 & \frac{1}{r} & 0 \\ \frac{1}{r} & 0 & 0 \\ 0 & 0 & -\sin(\theta) \cos(\theta)} \\ \pmatrix{0 & 0 & \frac{1}{r} \\ 0 & 0 & \frac{1}{\tan(\theta)} \\ \frac{1}{r} & \frac{1}{\tan(\theta)} & 0 }}")
+        };
 
         public MainWindow()
         {
             InitializeComponent();
+
+            FormulaSelector.ItemsSource = _testFormulas;
+            FormulaSelector.SelectedIndex = 0;
         }
 
         private TexFormula ParseFormula(string input)
@@ -23,7 +43,7 @@ namespace WpfMath.Example
             TexFormula formula = null;
             try
             {
-                formula = this.formulaParser.Parse(input);
+                formula = this._formulaParser.Parse(input);
             }
             catch (Exception ex)
             {
@@ -45,9 +65,9 @@ namespace WpfMath.Example
             if (result == false) return;
 
             // Create formula object from input text.
-            var formula = ParseFormula(inputTextBox.Text);
+            var formula = ParseFormula(InputTextBox.Text);
             if (formula == null) return;
-            var renderer = formula.GetRenderer(TexStyle.Display, this.formula.Scale, "Arial");
+            var renderer = formula.GetRenderer(TexStyle.Display, this.Formula.Scale, "Arial");
 
             // Open stream
             var filename = saveFileDialog.FileName;
@@ -65,7 +85,7 @@ namespace WpfMath.Example
                         break;
 
                     case 2:
-                        var bitmap = renderer.RenderToBitmap(10, 10);
+                        var bitmap = renderer.RenderToBitmap(0, 0, 300);
                         var encoder = new PngBitmapEncoder
                         {
                             Frames = { BitmapFrame.Create(bitmap) }
@@ -90,17 +110,6 @@ namespace WpfMath.Example
             return builder.ToString();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.formulaParser = new TexFormulaParser();
-
-            var testFormula1 = "\\int_0^{\\infty}{x^{2n} e^{-a x^2} dx} = \\frac{2n-1}{2a} \\int_0^{\\infty}{x^{2(n-1)} e^{-a x^2} dx} = \\frac{(2n-1)!!}{2^{n+1}} \\sqrt{\\frac{\\pi}{a^{2n+1}}}";
-            var testFormula2 = "\\int_a^b{f(x) dx} = (b - a) \\sum_{n = 1}^{\\infty}  {\\sum_{m = 1}^{2^n  - 1} { ( { - 1} )^{m + 1} } } 2^{ - n} f(a + m ( {b - a}  )2^{-n} )";
-            var testFormula3 = @"L = \int_a^b \sqrt[4]{ \left| \sum_{i,j=1}^ng_{ij}\left(\gamma(t)\right) \left[\frac{d}{dt}x^i\circ\gamma(t) \right] \left{\frac{d}{dt}x^j\circ\gamma(t) \right} \right|}dt";
-            var testFormula4 = "{{\\hat{ T _1}}}";
-            this.inputTextBox.Text = testFormula3;
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
             //
@@ -108,8 +117,14 @@ namespace WpfMath.Example
 
         private void inputTextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            formula.SelectionStart = inputTextBox.SelectionStart;
-            formula.SelectionLength = inputTextBox.SelectionLength;
+            Formula.SelectionStart = InputTextBox.SelectionStart;
+            Formula.SelectionLength = InputTextBox.SelectionLength;
+        }
+
+        private void FormulaTextBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = (ComboBoxItem) ((ComboBox) sender).SelectedItem;
+            InputTextBox.Text = (string)item.DataContext;
         }
     }
 }

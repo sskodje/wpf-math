@@ -1,22 +1,32 @@
-﻿<Project Sdk="Sunburst.NET.Sdk.WPF/1.0.47">
-  <PropertyGroup>
-    <TargetFramework>net40</TargetFramework>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyTitle>WPF-Math</AssemblyTitle>
-    <Description>.NET library for rendering mathematical formulae using the LaTeX typsetting style, for the WPF framework.</Description>
-    <Copyright>Copyright © Alex Regueiro 2010; Copyright © WPF-Math Contributors 2018</Copyright>
-    <AssemblyVersion>0.6.0</AssemblyVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data/*" />
-    <Resource Include="Fonts\cmex10.ttf" />
-    <Resource Include="Fonts\cmmi10.ttf" />
-    <Resource Include="Fonts\cmr10.ttf" />
-    <Resource Include="Fonts\cmsy10.ttf" />
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.0;net452</TargetFrameworks>
+        <LangVersion>8.0</LangVersion>
+        <UseWpf>true</UseWpf>
+        <OutputType>Library</OutputType>
+        <DebugType>Full</DebugType>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PackageId>WpfMath</PackageId>
+        <Version>0.8.0</Version>
+        <Title>WPF-Math</Title>
+        <Authors>ForNeVeR</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/ForNeVeR/wpf-math</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ForNeVeR/wpf-math.git</RepositoryUrl>
+        <AssemblyTitle>WPF-Math</AssemblyTitle>
+        <PackageReleaseNotes>WPF support for .NET Core 3.0; extended color support; \binom command; TeX parser bug fixes.</PackageReleaseNotes>
+        <PackageTags>wpf;latex;formula</PackageTags>
+        <Description>.NET library for rendering mathematical formulae using the LaTeX typsetting style, for the WPF framework.</Description>
+        <Copyright>Copyright © Alex Regueiro 2010; Copyright © WPF-Math Contributors 2019</Copyright>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Data/*" />
+        <Resource Include="Fonts\cmex10.ttf" />
+        <Resource Include="Fonts\cmmi10.ttf" />
+        <Resource Include="Fonts\cmr10.ttf" />
+        <Resource Include="Fonts\cmsy10.ttf" />
+    </ItemGroup>
 </Project>

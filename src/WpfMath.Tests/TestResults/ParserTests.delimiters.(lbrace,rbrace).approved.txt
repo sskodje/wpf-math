@@ -1,0 +1,60 @@
+{
+  "TextStyle": null,
+  "RootAtom": {
+    "BaseAtom": {
+      "Character": "a",
+      "TextStyle": null,
+      "IsDefaultTextStyle": true,
+      "IsTextSymbol": false,
+      "Type": "Ordinary",
+      "Source": {
+        "Start": 7,
+        "End": 8,
+        "Length": 1,
+        "Source": "\\left\\{a\\right\\}",
+        "SourceName": "User input"
+      }
+    },
+    "LeftDelimeter": {
+      "IsDelimeter": true,
+      "Name": "lbrace",
+      "IsTextSymbol": false,
+      "Type": "Opening",
+      "Source": {
+        "Start": 1,
+        "End": 7,
+        "Length": 6,
+        "Source": "\\left\\{a\\right\\}",
+        "SourceName": "User input"
+      }
+    },
+    "RightDelimeter": {
+      "IsDelimeter": true,
+      "Name": "rbrace",
+      "IsTextSymbol": false,
+      "Type": "Closing",
+      "Source": {
+        "Start": 9,
+        "End": 16,
+        "Length": 7,
+        "Source": "\\left\\{a\\right\\}",
+        "SourceName": "User input"
+      }
+    },
+    "Type": "Ordinary",
+    "Source": {
+      "Start": 1,
+      "End": 16,
+      "Length": 15,
+      "Source": "\\left\\{a\\right\\}",
+      "SourceName": "User input"
+    }
+  },
+  "Source": {
+    "Start": 0,
+    "End": 16,
+    "Length": 16,
+    "Source": "\\left\\{a\\right\\}",
+    "SourceName": "User input"
+  }
+}
