@@ -39,7 +39,6 @@ namespace WpfMath.Atoms
         {
             return symbols.Keys.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
         }
-        public static SymbolAtom GetAtom(string name, SourceSpan source)
 
         public static bool TryGetAtom(string name, SourceSpan source, out SymbolAtom atom)
         {

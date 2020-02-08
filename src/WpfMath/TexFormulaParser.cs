@@ -76,7 +76,7 @@ namespace WpfMath
 
         public static IList<string> GetAllCommands()
         {
-            return commands.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
+            return embeddedCommands.Where(x => !String.IsNullOrEmpty(x)).Select(x => @"\" + x).ToList();
         }
         public static IList<string> GetAllFormulas()
         {
@@ -288,10 +288,7 @@ namespace WpfMath
                             + superScriptChar + "\", \"" + subScriptChar + "\" and \""
                             + primeChar + "\" can't be the first character!");
                     else
-                    {
-                        var scriptsAtom = this.AttachScripts(formula, value, ref position, new RowAtom(value));
-                        formula.Add(scriptsAtom, value.Segment(initialPosition, position));
-                    }
+                        throw new TexParseException("Double scripts found! Try using more braces.");
                 }
                 else
                 {
