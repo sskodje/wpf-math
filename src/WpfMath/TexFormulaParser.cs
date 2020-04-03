@@ -553,6 +553,10 @@ namespace WpfMath
                             formula.TextStyle,
                             environment.CreateChildEnvironment());
 
+                        if (sqrtFormula.Source.Length == 0)
+                        {
+                            throw new TexParseException("An element is missing");
+                        }
                         source = value.Segment(start, position - start);
                         return new Tuple<AtomAppendMode, Atom>(
                             AtomAppendMode.Add,
